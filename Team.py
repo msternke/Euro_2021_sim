@@ -13,4 +13,4 @@ class Team(object):
         self.group_finish = 0
 
     def __repr__(self):
-        return f"{self.name} {self.group} {self.group_points}"
+        return f"{self.name} is in {self.group}"

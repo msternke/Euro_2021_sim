@@ -32,8 +32,19 @@ class Knockout(object):
         self.final_match[0].play_match()
 
     def determine_thirds_matchups(self):
+        '''
+            Determines matchups in the Round of 16
+
+            The third place finishing teams from four of the six groups
+            move on to the knockout round, and the matchups in the round
+            are dependent on which four groups they are from.
+
+            See: https://en.wikipedia.org/wiki/UEFA_Euro_2020_knockout_phase
+        '''
+
         index_map = {char: ind for ind, char in enumerate('ABCDEF')}
 
+        #get top four third place finishing teams
         thirds = [group.third for group in self.groups]
         thirds.sort(key=lambda x: (x.group_points, x.goal_diff, x.goals_for), reverse=True)
         thirds_groups = ''.join(sorted([team.group for team in thirds[:4]]))
@@ -70,6 +81,10 @@ class Knockout(object):
             self.matchups = [index_map[i] for i in 'FEDC']
 
     def build_round_16(self):
+        '''
+            Setting up matches in Round of 16
+        '''
+
         self.determine_thirds_matchups()
 
         self.round_16_matches = []
@@ -89,6 +104,10 @@ class Knockout(object):
             self.round_16_teams.append(match.team2)
 
     def build_qfs(self):
+        '''
+            Setting up matches in Quarterfinals
+        '''
+
         self.qf_matches = []
 
         self.qf_matches.append(Match(self.round_16_matches[0].winner, self.round_16_matches[1].winner, False))
@@ -102,6 +121,10 @@ class Knockout(object):
             self.qf_teams.append(match.team2)
 
     def build_semis(self):
+        '''
+            Setting up matches in Semifinals
+        '''
+
         self.semi_matches = []
 
         self.semi_matches.append(Match(self.qf_matches[0].winner, self.qf_matches[1].winner, False))
@@ -113,11 +136,19 @@ class Knockout(object):
             self.semi_teams.append(match.team2)
 
     def build_finals(self):
+        '''
+            Setting up Finals match
+        '''
+
         self.final_match = [Match(self.semi_matches[0].winner, self.semi_matches[1].winner, False)]
 
         self.final_teams = [self.final_match[0].team1, self.final_match[0].team2]
 
     def print_matches(self, matches):
+        '''
+            Prints results of finals match
+        '''
+
         if self.round == 'Finals':
             print(f"***** {self.round}!!! ******")
         else:
